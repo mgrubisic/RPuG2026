@@ -6,7 +6,7 @@ print("Računalno programiranje u građevinarstvu")
 
 # %% 2. Brojevi: cijeli i decimalni
 # Primjer definiranja cjelobrojnih (int) i decimalnih (float) varijabli te provjera njihovog tipa.
-broj_katova = 5
+broj_katova = 5.5
 broj_stupova = 12
 
 ## Decimalni brojevi (float)
@@ -17,6 +17,8 @@ E = 210000.0        # [MPa] modul elastičnosti čelika
 ## Provjera tipa
 print(type(broj_katova))  # <class 'int'>
 print(type(fck))          # <class 'float'>
+
+print(type("Bok!"))
 
 # %% 3. Tekst (stringovi)
 # Prikaz rada sa stringovima, uključujući spajanje (konkatenaciju) i određivanje duljine.
@@ -111,6 +113,21 @@ I = (b * h**3) / 12
 
 # %% 9. Matematičke funkcije (modul math)
 # Korištenje ugrađenog 'math' modula za trigonometriju, logaritme i konstante.
+
+from math import * # importirao sam sve bez naziva pripadanja!
+
+print(pi)
+# OVAJ PRISTUP NE PREPORUČUJEMO!
+
+#%%
+
+
+import math as m # uveo sam novu kraticu ove biblioteke
+
+print(m.pi)
+
+#%%
+
 import math  # učitavanje modula
 
 # Konstante
