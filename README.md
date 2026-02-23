@@ -1,1 +1,1 @@
-# RPuG2026
+# Računalno programiranje u građevinarstvu (RPuG2026)
