@@ -1,0 +1,13 @@
+*.aux
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*.ipynb_checkpoints
+*.jupyter
+*.virtual_documents
+*.docx
+*.zip
+*.bat
