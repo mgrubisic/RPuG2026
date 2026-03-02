@@ -1,3 +1,19 @@
+# -*- coding: utf-8 -*-
+# =============================================================================
+#  Računalno programiranje u građevinarstvu (254810)
+#  Tjedan 1/15 --- Uvod u Python
+#  Sveučilište J. J. Strossmayera u Osijeku
+#  Građevinski i arhitektonski fakultet Osijek (GrAFOS)
+#  Izv. prof. dr. sc. Marin Grubišić | marin.grubisic@gfos.hr
+# =============================================================================
+
+# =============================================================================
+#  NAPOMENA: Svaka sekcija (#%%) je zasebna ćelija u Spyderu.
+#  Pokretanje pojedine ćelije: Ctrl+Enter
+#  Pokretanje cijele skripte: F5
+# =============================================================================
+
+
 # %% 1. Prvi program: Hello, World!
 # Ovaj primjer demonstrira osnovnu upotrebu print() funkcije za ispis teksta u konzolu.
 print("Hello, World!")
