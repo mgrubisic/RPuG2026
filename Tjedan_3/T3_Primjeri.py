@@ -112,7 +112,7 @@ svojstva = geometrijska_svojstva_pravokutnika(0.30, 0.55)
 print(f"\nKao n-torka: I = {svojstva[1]*1e8:.1f} cm⁴")
 
 
-# %% [5] Doseg varijabli --- lokalne i globalne
+# %% [5a] Doseg varijabli --- lokalne i globalne
 # Razlika između lokalnih (unutar funkcije) i globalnih varijabli.
 
 fcd = 20.0   # GLOBALNA varijabla (definirana izvan funkcije)
@@ -130,6 +130,23 @@ print(f"sigma = {sigma:.2f} MPa,  OK = {ok}")
 
 # Wy i sigma iz funkcije NISU dostupni ovdje:
 # print(Wy)    # NameError: name 'Wy' is not defined
+
+
+# %% [5b] Doseg varijabli --- lokalne i globalne
+# Razlika između lokalnih (unutar funkcije) i globalnih varijabli.
+broj_provjera = 0   # globalna varijabla (brojač poziva)
+
+def provjeri_naprezanje(sigma, sigma_Rd):
+    """Provjera naprezanja i inkrementiranje globalnog brojača."""
+    global broj_provjera       # DEKLARACIJA: koristimo globalnu!
+    broj_provjera += 1         # sada smijemo mijenjati globalnu
+    return sigma <= sigma_Rd
+
+provjeri_naprezanje(14.2, 20.0)   # poziv 1
+provjeri_naprezanje(21.5, 20.0)   # poziv 2
+provjeri_naprezanje( 9.8, 20.0)   # poziv 3
+
+print(f"Ukupno provjera: {broj_provjera}")   # → 3
 
 
 # %% [6] Dokumentacijski nizovi --- docstrings
@@ -154,7 +171,7 @@ def progib_proste_grede(q, L, E, I):
 
 # Pristup docstringu
 help(progib_proste_grede)          # puni ispis u konzoli
-print(progib_proste_grede.__doc__) # izravni pristup
+# print(progib_proste_grede.__doc__) # izravni pristup
 
 # Primjer poziva
 b, h   = 0.30, 0.55    # [m]

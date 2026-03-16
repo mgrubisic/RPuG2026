@@ -52,5 +52,46 @@ koristeći grananje (if/elif/else) odredite status:
 Na kraju pronađite i ispišite gredu s najvećim naprezanjem.
 """
 
+grede = [
+    {"oznaka": "G1", "duljina": 5.0, "sirina": 0.3, "visina": 0.5, "opterecenje": 20.0},
+    {"oznaka": "G2", "duljina": 6.5, "sirina": 0.35, "visina": 0.6, "opterecenje": 25.0},
+    {"oznaka": "G3", "duljina": 4.0, "sirina": 0.25, "visina": 0.45, "opterecenje": 15.0},
+    {"oznaka": "G4", "duljina": 15.0, "sirina": 0.4, "visina": 0.65, "opterecenje": 30.0}
+    ]
+
+fcd = 20.0 # [MPa]
+
+for g in grede:
+    
+    # Proračun
+    M_max = g["opterecenje"] * g["duljina"]** 2 / 8  # [kNm]
+    # print(M_max)
+    W = (g["sirina"] * g["visina"]**2) / 6 # [m3]
+    # print(W)
+    naprezanje = M_max / (W*1000) # [MPa]
+    # print(naprezanje)
+    eta = (naprezanje / fcd) # Faktor iskorištenosti!
+    # print(f"{eta:.1%}")
+    
+    if eta <= 0.6:
+        status = "Nisko iskorišten!"
+    elif eta <= 0.85:
+        status = "Umjereno iskorišten!"
+    elif eta <= 1:
+        status = "Visoko iskorišten!"
+    else:
+        status = "PREKORAČENJE NOSIVOSTI!"
+    
+    
+    print(f"{g['oznaka']:>5} | {M_max:>8.2f} | {eta:>7.1%} | {status}")
+
+
+
+
+
+
+
+
+
 
 

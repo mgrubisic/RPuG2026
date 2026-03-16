@@ -254,6 +254,8 @@ rasponi = [4.0, 5.5, 6.0, 5.5, 4.0]   # [m]
 # Osnovna iteracija
 for L in rasponi:
     print("Raspon:", L, "m")
+    
+Svi_momenti = []
 
 # Izračun za svaki element liste
 q = 15.0   # [kN/m] jednoliko opterećenje
@@ -261,6 +263,8 @@ print("\nProračun momenata:")
 for L in rasponi:
     M_max = q * L**2 / 8    # [kNm] max. moment proste grede
     print(f"  L = {L:.1f} m  -->  M_max = {M_max:.2f} kNm")
+    
+    Svi_momenti.append(M_max)
 
 
 # %% [12] Petlja for --- range() i enumerate()
@@ -291,7 +295,7 @@ for i, L in enumerate(rasponi, start=1):
 
 b     = 0.20    # [m] početna širina presjeka
 h     = 0.30    # [m] početna visina presjeka
-M_Ed  = 120.0   # [kNm] projektni moment
+M_Ed  = 220.0   # [kNm] projektni moment
 fcd   = 20.0    # [MPa] projektna čvrstoća
 
 iteracija = 0
@@ -306,7 +310,7 @@ while True:
         print(f"  sigma = {sigma:.2f} MPa <= fcd = {fcd:.1f} MPa")
         break   # izlaz iz petlje
     else:
-        h += 0.05   # povećaj visinu za 5 cm
+        h += 0.001   # povećaj visinu za 5 cm
 
 
 # %% [14] Kontrola petlji: break i continue
