@@ -33,7 +33,7 @@ print("=" * 60)
 #  E   = modul elastičnosti [kN/m²]
 #  I   = moment tromosti [m⁴]
 
-def kritična_sila(E, I, L, beta):
+def kriticna_sila(E, I, L, beta):
     """
     Eulerova kritična sila tlačnog štapa [kN].
 
@@ -46,11 +46,18 @@ def kritična_sila(E, I, L, beta):
     Vraća:
         N_cr : Eulerova kritična sila [kN]
     """
-
-
+    Lcr = L * beta # efektivna duljina izvijanja
+    N_cr = (math.pi**2 * E * I) / Lcr**2
+    return N_cr
+    
 # ── Testni poziv s pozicijskim argumentima ──
+# kriticna_sila(E, I, L, beta)
+E_celik = 210_000_000 # [kNm] modul elastičnosti
+I = 8_356e-8 # [m4] HEA 200 oko slabije osi
+L = 4.0 # [m] duljina elementa
 
-
+N_cr = kriticna_sila(E_celik, I, L, 1.0)
+print(f"\nSila izvijanja: {N_cr:.2f} kN\n")
 
 # %% ── Korak 3: DEFAULT vrijednosti --- faktor beta ─────────────────────────
 #
@@ -73,11 +80,21 @@ def faktor_beta(uvjet="zglobno-zglobno"):
     Vraća:
         beta : faktor duljine izvijanja [-]
     """
+    tablica = {
+        "zglobno-zglobno" : 1.0,
+        "konzola" : 2.0,
+        "upeto-zglobno" : 0.7,
+        "obosrano-upeto" : 0.5,
+        }
+    if uvjet not in tablica:
+        raise ValueError (f"Nepoznat uvjet: {uvjet}, Dostupno: {list(tablica.keys())}")
+    
+    return tablica[uvjet]
 
 
 # ── Pozivi sa i bez argumenta (default!) ──
-
-
+beta = faktor_beta("upeto-zglobno")
+print(beta)
 
 
 # %% ── Korak 4: Višestruke povratne vrijednosti ─────────────────────────────
