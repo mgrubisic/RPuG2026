@@ -51,7 +51,7 @@ theta = np.radians(kut)   # θ [rad]
 # --- Izračun izvedenih veličina ---
 T = 2 * v0 * np.sin(theta) / g          # ukupno vrijeme leta [s]
 R = v0**2 * np.sin(2 * theta) / g       # dolet [m]
-H = v0**2 * np.sin(theta)**2 / (2 * g) # maksimalna visina [m]
+H = v0**2 * np.sin(theta)**2 / (2 * g)  # maksimalna visina [m]
 
 # --- Ispis rezultata ---
 print(f"\nUlazni podaci:")

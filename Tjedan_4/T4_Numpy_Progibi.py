@@ -41,15 +41,15 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------
 
 # Materijal: beton C30/37
-      # modul elastičnosti [kN/m²]
+E = 32.0E6      # modul elastičnosti [kN/m²]
 
 # Presjek: pravokutni AB presjek
-        # širina presjeka [m]
-        # visina presjeka [m]
+b = 0.30        # širina presjeka [m]
+h = 0.50        # visina presjeka [m]
 
 # Izvedeni parametri presjeka
-                   # površina [m²]
-         # moment tromosti [m⁴]
+A = b*h   # površina [m²]
+I = (b*h**3)/12   # moment tromosti [m⁴]
 
 print("--- Parametri presjeka ---")
 print(f"  b = {b*100:.0f} cm,  h = {h*100:.0f} cm")
@@ -67,24 +67,27 @@ print(f"  E = {E/1e6:.0f} GPa   -->   EI = {E*I:.2f} kNm²")
 #
 # -----------------------------------------------------------------------
 
-        # jednoliko opterećenje [kN/m]
-         # raspon grede [m]
+q = 20.0  # jednoliko opterećenje [kN/m]
+L = 6.0   # raspon grede [m]
 
 # Diskretizacija osi grede
-    # 300 točaka od 0 do L
+x = np.linspace(0, L, 300)    # 300 točaka od 0 do L
 
 # Izračun progiba (vektorski --- bez petlje!)
-
+# w(x) = q * x * (L³ - 2L·x² + x³) / (24·E·I)
+w = q * x * (L**3 - 2*L*x**2 + x**3) / (24*E*I)
 
 # Analitička vrijednost maksimalnog progiba na sredini
+w_max_analiticki = 5 * q * L**4 / (384 * E * I)
+w_max_numericki = np.max(w)
 
            # NumPy pronalazi maksimum
 
 print("--- Provjera za jedan slučaj ---")
 print(f"  q = {q} kN/m,  L = {L} m")
-print(f"  w_max (analitički) = {w_max_an*1000:.3f} mm")
-print(f"  w_max (np.max)     = {w_max_np*1000:.3f} mm")
-print(f"  Relativna razlika  = {abs(w_max_an - w_max_np)/w_max_an*100:.4f} %")
+print(f"  w_max (analitički) = {w_max_analiticki*1000:.6f} mm")
+print(f"  w_max (np.max)     = {w_max_numericki*1000:.6f} mm")
+print(f"  Relativna razlika  = {abs(w_max_analiticki - w_max_numericki)/w_max_analiticki*100:.4f} %")
 
 
 # %%  [FAZA 3]  Crtanje jedne krivulje
@@ -93,6 +96,14 @@ print(f"  Relativna razlika  = {abs(w_max_an - w_max_np)/w_max_an*100:.4f} %")
 #  Ovo je "kostur" grafa koji ćemo proširiti u Fazi 5.
 # -----------------------------------------------------------------------
 
+plt.figure(figsize=(9,4)) # širina/visina dimenzija u inčima
+
+plt.plot(x, w*1000, color="blue", linewidth=3)
+
+plt.xlabel("x [m]")
+plt.ylabel("Progib [mm]")
+plt.title(f"Progib grede: q={q} kN/m, L={L} m, b/h={b}/{h} cm")
+plt.show()
 
 
 # %%  [FAZA 4]  NumPy array raspona i petlja
