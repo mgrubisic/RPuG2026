@@ -41,6 +41,7 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------
 
 # Materijal: beton C30/37
+<<<<<<< HEAD
 E = 32.0E6      # modul elastičnosti [kN/m²]
 
 # Presjek: pravokutni AB presjek
@@ -50,6 +51,17 @@ h = 0.50        # visina presjeka [m]
 # Izvedeni parametri presjeka
 A = b*h   # površina [m²]
 I = (b*h**3)/12   # moment tromosti [m⁴]
+=======
+      # modul elastičnosti [kN/m²]
+
+# Presjek: pravokutni AB presjek
+        # širina presjeka [m]
+        # visina presjeka [m]
+
+# Izvedeni parametri presjeka
+                   # površina [m²]
+         # moment tromosti [m⁴]
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
 print("--- Parametri presjeka ---")
 print(f"  b = {b*100:.0f} cm,  h = {h*100:.0f} cm")
@@ -67,6 +79,7 @@ print(f"  E = {E/1e6:.0f} GPa   -->   EI = {E*I:.2f} kNm²")
 #
 # -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 q = 20.0  # jednoliko opterećenje [kN/m]
 L = 6.0   # raspon grede [m]
 
@@ -80,14 +93,32 @@ w = q * x * (L**3 - 2*L*x**2 + x**3) / (24*E*I)
 # Analitička vrijednost maksimalnog progiba na sredini
 w_max_analiticki = 5 * q * L**4 / (384 * E * I)
 w_max_numericki = np.max(w)
+=======
+        # jednoliko opterećenje [kN/m]
+         # raspon grede [m]
+
+# Diskretizacija osi grede
+    # 300 točaka od 0 do L
+
+# Izračun progiba (vektorski --- bez petlje!)
+
+
+# Analitička vrijednost maksimalnog progiba na sredini
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
            # NumPy pronalazi maksimum
 
 print("--- Provjera za jedan slučaj ---")
 print(f"  q = {q} kN/m,  L = {L} m")
+<<<<<<< HEAD
 print(f"  w_max (analitički) = {w_max_analiticki*1000:.6f} mm")
 print(f"  w_max (np.max)     = {w_max_numericki*1000:.6f} mm")
 print(f"  Relativna razlika  = {abs(w_max_analiticki - w_max_numericki)/w_max_analiticki*100:.4f} %")
+=======
+print(f"  w_max (analitički) = {w_max_an*1000:.3f} mm")
+print(f"  w_max (np.max)     = {w_max_np*1000:.3f} mm")
+print(f"  Relativna razlika  = {abs(w_max_an - w_max_np)/w_max_an*100:.4f} %")
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
 
 # %%  [FAZA 3]  Crtanje jedne krivulje
@@ -96,6 +127,7 @@ print(f"  Relativna razlika  = {abs(w_max_analiticki - w_max_numericki)/w_max_an
 #  Ovo je "kostur" grafa koji ćemo proširiti u Fazi 5.
 # -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 plt.figure(figsize=(9,4)) # širina/visina dimenzija u inčima
 
 # plt.plot(x-os, y-os, color:boja, linewidth:debljina linije)
@@ -111,6 +143,8 @@ plt.xlabel("Raspon [m]")
 plt.ylabel("Progib [mm]")
 plt.title(f"Progib grede: q={q} kN/m, L={L} m, b/h={b}/{h} cm")
 plt.show()
+=======
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
 
 # %%  [FAZA 4]  NumPy array raspona i petlja
@@ -122,6 +156,7 @@ plt.show()
 #  Što se dogodi ako L_arr zamijenimo s np.linspace(4, 8, 5)?
 # -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 # I = I/2 # ovdje smo prepolovili izno momenta inercije
 
 q = 20.0 * 5   # kN/m (ostaje isto za sve grede)
@@ -133,6 +168,13 @@ for L_p in L_i:
     L250_i = L_p / 250
     ok = "OK!" if w_max_i <= L250_i else "NOK!"
     print(f"{L_p:>7.1f} | {w_max_i*1000:>10.2f} | {L250_i*1000:>10.1f} | {ok:>9}")
+=======
+   # kN/m (ostaje isto za sve grede)
+
+   # rasponi [m]
+
+
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
 
 # %%  [FAZA 5]  Višestruke krivulje petljom --- GLAVNI REZULTAT
@@ -146,6 +188,7 @@ for L_p in L_i:
 #  Primijetite: cmap (mapa boja) automatski dodjeljuje razlicite boje!
 # -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 q = 20.0 * 5 # [kN/m]
 
 L_i = np.array([4,5,6,7,8]) # [m]
@@ -178,6 +221,8 @@ plt.gca().invert_yaxis()
 plt.show()
 
 
+=======
+>>>>>>> 3f22ddda2e45a8fbb6e067a75513186486981ec4
 
 # Formatiranje osi i naslova
 
