@@ -71,7 +71,7 @@ q = 20.0  # jednoliko opterećenje [kN/m]
 L = 6.0   # raspon grede [m]
 
 # Diskretizacija osi grede
-x = np.linspace(0, L, 300)    # 300 točaka od 0 do L
+x = np.linspace(0, L, 100)    # 300 točaka od 0 do L
 
 # Izračun progiba (vektorski --- bez petlje!)
 # w(x) = q * x * (L³ - 2L·x² + x³) / (24·E·I)
@@ -98,9 +98,16 @@ print(f"  Relativna razlika  = {abs(w_max_analiticki - w_max_numericki)/w_max_an
 
 plt.figure(figsize=(9,4)) # širina/visina dimenzija u inčima
 
-plt.plot(x, w*1000, color="blue", linewidth=3)
+# plt.plot(x-os, y-os, color:boja, linewidth:debljina linije)
+plt.plot(x, w*1000, color="blue", linewidth=3, marker='o')
+# Progibna linija u milimetrima!
 
-plt.xlabel("x [m]")
+# Flipanje y-osi
+plt.gca().invert_yaxis()
+
+plt.grid(True, linestyle=":")
+
+plt.xlabel("Raspon [m]")
 plt.ylabel("Progib [mm]")
 plt.title(f"Progib grede: q={q} kN/m, L={L} m, b/h={b}/{h} cm")
 plt.show()
@@ -115,11 +122,17 @@ plt.show()
 #  Što se dogodi ako L_arr zamijenimo s np.linspace(4, 8, 5)?
 # -----------------------------------------------------------------------
 
-   # kN/m (ostaje isto za sve grede)
+# I = I/2 # ovdje smo prepolovili izno momenta inercije
 
-   # rasponi [m]
+q = 20.0 * 5   # kN/m (ostaje isto za sve grede)
 
+L_i = np.array([4, 5, 6, 7, 8])   # rasponi [m]
 
+for L_p in L_i:
+    w_max_i = 5 * q * L_p**4 / (384 * E * I)
+    L250_i = L_p / 250
+    ok = "OK!" if w_max_i <= L250_i else "NOK!"
+    print(f"{L_p:>7.1f} | {w_max_i*1000:>10.2f} | {L250_i*1000:>10.1f} | {ok:>9}")
 
 
 # %%  [FAZA 5]  Višestruke krivulje petljom --- GLAVNI REZULTAT
@@ -132,6 +145,38 @@ plt.show()
 #
 #  Primijetite: cmap (mapa boja) automatski dodjeljuje razlicite boje!
 # -----------------------------------------------------------------------
+
+q = 20.0 * 5 # [kN/m]
+
+L_i = np.array([4,5,6,7,8]) # [m]
+
+plt.figure(figsize=(10,5))
+
+for k, L_p in enumerate(L_i):
+    x_i = np.linspace(0, L_p, 100)
+    w_i = q * x_i * (L_p**3 - 2*L_p*x_i**2 + x_i**3) / (24*E*I)
+    L250_i = L_p / 250 # provjera za GSU
+    
+    plt.plot(x_i, w_i*1000,
+             linewidth=2.5,
+             label=f"L = {L_p:.0f} m, $w_{{max}}$ = {np.max(w_i)*1000:.1f} mm")
+
+    plt.axhline(L250_i*1000,
+                linewidth=2,
+                linestyle="-.",
+                alpha=0.5)
+
+
+plt.xlabel("Rasponi [m]", fontsize=12)
+plt.ylabel("Progibi [mm]", fontsize=12)
+plt.title("Progibne linije različitih duljina greda")
+plt.legend(fontsize=11, loc="lower right")
+plt.grid(True, linestyle="--")
+
+plt.gca().invert_yaxis()
+    
+plt.show()
+
 
 
 # Formatiranje osi i naslova

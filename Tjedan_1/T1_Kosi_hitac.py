@@ -104,11 +104,11 @@ ax.plot(x, y, color='steelblue', linewidth=2.5,
 
 # Oznaka maksimalne visine (najniži indeks najbliži maksimumu y)
 idx_max = np.argmax(y)                 # indeks elementa s najvećom y vrijednošću
-ax.annotate(f'H = {y[idx_max]:.1f} m',
-            xy=(x[idx_max], y[idx_max]),         # točka na grafu
-            xytext=(x[idx_max] + 20, y[idx_max] - 10), # pozicija teksta
-            arrowprops=dict(arrowstyle='->', color='gray'),
-            fontsize=10)
+# ax.annotate(f'H = {y[idx_max]:.1f} m',
+#             xy=(x[idx_max], y[idx_max]),         # točka na grafu
+#             xytext=(x[idx_max] + 20, y[idx_max] - 10), # pozicija teksta
+#             arrowprops=dict(arrowstyle='->', color='gray'),
+#             fontsize=10)
 
 # Estetika grafa
 ax.set_xlabel('Vodoravna udaljenost  x [m]', fontsize=12)
