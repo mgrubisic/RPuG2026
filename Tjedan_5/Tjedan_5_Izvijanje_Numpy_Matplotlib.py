@@ -49,12 +49,9 @@
 #  Uvijek uvozite na vrhu datoteke.
 # -----------------------------------------------------------------------
 
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 print("Biblioteke uspješno uvezene.")
-print(f"  NumPy verzija:      {np.__version__}")
-print(f"  Matplotlib verzija: {plt.matplotlib.__version__}")
 
 
 # %%  [FAZA 1]  Parametri čeličnog stupa --- IPE 300
@@ -70,18 +67,18 @@ E   = 210.0e6    # modul elastičnosti [kN/m²]
 fyk = 235.0      # karakteristična granica popuštanja [MPa]
 
 # Profil: IPE 300 (izvijanje oko slabe osi z-z!)
-  # površina presjeka [cm²]
-  # moment tromosti oko z-osi [cm⁴]  <-- slaba os!
-  # moment tromosti oko y-osi [cm⁴]  <-- jaka os
+                 # površina presjeka [cm²]
+                 # moment tromosti oko z-osi [cm⁴]  <-- slaba os!
+                 # moment tromosti oko y-osi [cm⁴]  <-- jaka os
 
 # Pretvorba u SI jedinice [m]
-   # m²
-   # m⁴  <-- koristimo za izvijanje!
-   # m⁴
+    # m²
+    # m⁴  <-- koristimo za izvijanje!
+    # m⁴
 
 # Polumjeri tromosti
-  # m  --- relevantan za izvijanje!
-  # m
+    # m  --- relevantan za izvijanje!
+    # m
 
 print("--- IPE 300 | Čelik S235 ---")
 print(f"  A   = {A*1e4:.2f} cm²")
@@ -101,10 +98,10 @@ beta = 1.0     # Zglobno - Zglobno
 L    = 5.0     # visina stupa [m]
 
 # Eulerova formula
-   # kN
+    # kN
 
 # Vitkoća
-   # bezdimenzijska vitkoća
+    # bezdimenzijska vitkoća
 
 print("--- Provjera za jedan slučaj ---")
 print(f"  Rubni uvjeti: Zglobno-Zglobno (beta = {beta})")
@@ -124,17 +121,25 @@ print(f"  N_cr / N_pl = {N_cr/N_pl:.3f}")
 #  Prikazujemo kako N_cr brzo pada s porastom visine (proporcionalno 1/L²).
 # -----------------------------------------------------------------------
 
-  # Zglobno - Zglobno
+    # Zglobno - Zglobno
 
 # Diskretizacija visina stupa: od 2 do 12 m
-   # m
+    # m
 
 # Vektorski izračun --- bez petlje!
-   # kN
+    # kN
 
 # Horizontalna linija: plastična nosivost (gornja granica!)
-   # kN
+    # kN
 
+# --- Crtanje ---
+# fig, ax = ...
+# ax.plot(...)
+# ax.axhline(...)
+# ax.set_xlabel(...)  ax.set_ylabel(...)  ax.set_title(...)
+# ax.set_xlim(...)    ax.set_ylim(...)
+# ax.legend()         ax.grid(...)
+# plt.tight_layout()  plt.show()
 
 print("Graf jedne krivulje iscrtan.")
 
@@ -148,15 +153,17 @@ print("Graf jedne krivulje iscrtan.")
 #  Zašto je N_cr za U-U četiri puta veći nego za Z-Z?
 # -----------------------------------------------------------------------
 
-   # m --- fiksna visina za tablicu
+    # m --- fiksna visina za tablicu
 
 # Rubni uvjeti kao NumPy arraji (isti indeks = isti slučaj!)
+    # beta_arr = ...
+    # oznake   = ...
 
 # Vektorski izračun za sve rubne uvjete odjednom
                        # kN
-                       # vitkost
+                       # vitkoost
 
-  # kN
+    # kN
 
 print(f"--- Usporedna tablica: IPE 300, L = {L_fix} m ---")
 print(f"{'Rubni uvjeti':>16} | {'beta':>5} | "
@@ -178,43 +185,61 @@ for k in range(len(beta_arr)):
 #  Primijetite: enumerate() daje i indeks (k) i vrijednost (beta_i).
 # -----------------------------------------------------------------------
 
+    # m  — zajednički niz visina
+    # boje = [...]
 
+# fig, ax = plt.subplots(...)
 
+# for k, (beta_i, ozn_i) in enumerate(zip(beta_arr, oznake)):
+#     N_cr_i = ...
+#
+#     # Granica EC3: vitkoća lambda <= 200  →  L <= 200 * i_z / beta_i
+#     L_lim_i = ...
+#     maska    = ...
+#
+#     # Punom linijom do granice vitkoće, isprekidanom iznad nje
+#     ax.plot(L_arr[maska],  ...)
+#     ax.plot(L_arr[~maska], ..., ls='--', alpha=0.45)
 
+# ax.axhline(N_pl, ...)          # horizontalna linija: N_pl
+# ax.axvline(L_ref, ...)         # vertikalna linija: lambda=200 (Z-Z)
+# ax.text(...)                   # tekstualne oznake
+# ax.set_xlabel(...)  ax.set_ylabel(...)  ax.set_title(...)
+# ax.set_xlim(...)    ax.set_ylim(...)
+# ax.legend(...)      ax.grid(...)
+# plt.tight_layout()
+# plt.savefig('tjedan4_izvijanje.pdf', dpi=200)
+# plt.show()
 
+print("Glavni graf s višestrukim krivuljama iscrtan i pohranjen.")
 
 
 # %%  [FAZA 8]  Sažetak naučenih naredbi
 # -----------------------------------------------------------------------
 
-sazetak = """
-╔══════════════════════════════════════════════════════════════════════╗
-║       SAŽETAK: Radionica izvijanja (NumPy + Matplotlib)             ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  NumPy naredbe:                                                      ║
-║    np.array([...])          — kreiranje niza rubnih uvjeta / profila ║
-║    np.linspace(a, b, N)     — niz visina / vitkoća za krivulje       ║
-║    np.sqrt(I / A)           — vektorski izračun polumjera tromosti   ║
-║    np.pi                    — konstanta pi                           ║
-║    arr[maska]               — booleovo indeksiranje (lambda <= 200)  ║
-║                                                                      ║
-║  Matplotlib naredbe:                                                 ║
-║    ax.plot(x, y, ls='--')   — crtanje krivulje s linijskim stilom   ║
-║    ax.axhline(y_val, ...)   — horizontalna referentna linija         ║
-║    ax.axvline(x_val, ...)   — vertikalna referentna linija           ║
-║    ax.text(x, y, 'tekst')   — tekstualna oznaka na grafu            ║
-║    ax.set_xlim(left=0)      — postavljanje limita osi               ║
-║    plt.savefig('f.pdf')     — pohrana u PDF/PNG                     ║
-║                                                                      ║
-║  Petlja za višestruke krivulje:                                      ║
-║    zip(beta_arr, oznake)    — paralelna iteracija dvaju nizova       ║
-║    enumerate(zip(...))      — indeks + para vrijednosti              ║
-║    linestyle=stilovi[k]     — razliciti stilovi linije po k         ║
-║                                                                      ║
-║  Inženjerske spoznaje:                                               ║
-║    N_cr ~ 1/L²              — brz pad nosivosti s visinom           ║
-║    N_cr ~ beta^(-2)         — U-U nosi 4× više od Z-Z              ║
-║    lambda = beta*L/i_z      — vitkoća = jedinstven mjerni par       ║
-╚══════════════════════════════════════════════════════════════════════╝
-"""
-print(sazetak)
+# sazetak = """
+# ╔══════════════════════════════════════════════════════════════════════╗
+# ║       SAŽETAK: Radionica izvijanja (NumPy + Matplotlib)             ║
+# ╠══════════════════════════════════════════════════════════════════════╣
+# ║  NumPy naredbe:                                                      ║
+# ║    np.array([...])          — kreiranje niza rubnih uvjeta / profila ║
+# ║    np.linspace(a, b, N)     — niz visina / vitkoća za krivulje       ║
+# ║    np.sqrt(I / A)           — vektorski izračun polumjera tromosti   ║
+# ║    np.pi                    — konstanta pi                           ║
+# ║    arr[maska]               — booleovo indeksiranje (lambda <= 200)  ║
+# ║                                                                      ║
+# ║  Matplotlib naredbe:                                                 ║
+# ║    ax.plot(x, y, ls='--')   — crtanje krivulje s linijskim stilom   ║
+# ║    ax.axhline(y_val, ...)   — horizontalna referentna linija         ║
+# ║    ax.axvline(x_val, ...)   — vertikalna referentna linija           ║
+# ║    ax.text(x, y, 'tekst')   — tekstualna oznaka na grafu            ║
+# ║    ax.set_xlim(left=0)      — postavljanje limita osi               ║
+# ║    plt.savefig('f.pdf')     — pohrana u PDF/PNG                     ║
+# ║                                                                      ║
+# ║  Inženjerske spoznaje:                                               ║
+# ║    N_cr ~ 1/L²              — brz pad nosivosti s visinom           ║
+# ║    N_cr ~ beta^(-2)         — U-U nosi 4× više od Z-Z              ║
+# ║    lambda = beta*L/i_z      — vitkoća = jedinstven mjerni par       ║
+# ╚══════════════════════════════════════════════════════════════════════╝
+# """
+# print(sazetak)
