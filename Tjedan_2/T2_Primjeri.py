@@ -50,10 +50,12 @@ rasponi.pop()            # ukloni i vrati zadnji element
 rasponi.sort()           # sortiraj uzlazno
 rasponi.reverse()        # obrnuti redoslijed
 
-# Korisne funkcije
-print(max(rasponi))   # najveći element
-print(min(rasponi))   # najmanji element
-print(sum(rasponi))   # zbroj svih elemenata
+# # Korisne funkcije
+# print(max(rasponi))   # najveći element
+# print(min(rasponi))   # najmanji element
+# print(sum(rasponi))   # zbroj svih elemenata
+
+rasponi[0] = 0.40   # TypeError!
 
 
 # %% [3] N-torke (tuple)
@@ -72,7 +74,7 @@ b, h = presjek        # elegantno dohvaćanje vrijednosti
 x, y, z = cvor_A
 
 # N-torke se NE mogu mijenjati --- ovo bi izazvalo grešku:
-# presjek[0] = 0.40   # TypeError!
+presjek[0] = 0.40   # TypeError!
 
 # Provjera tipa
 print(type(presjek))  # <class 'tuple'>
@@ -125,6 +127,7 @@ materijali = [
     {"naziv": "C35/45", "fck": 35.0, "Ecm": 34077.0},
 ]
 print(materijali[1]["fck"])  # 30.0
+print(materijali[1]["naziv"])  # 30.0
 
 
 # %% [6] Operatori usporedbe
@@ -307,6 +310,25 @@ while True:
         break   # izlaz iz petlje
     else:
         h += 0.05   # povećaj visinu za 5 cm
+        
+        #%%
+        
+b, h = 0.30, 0.55 # [m]
+M_Ed = 187.24 # [kNm]
+sigma = 14.567 # [MPa]
+ok = True
+
+# Bez formatiranja --- nečitljiv ispis
+print("sigma =", sigma, "MPa") # sigma = 14.567 MPa
+# F-string --- osnovna ugradnja varijable
+print(f"sigma = {sigma} MPa") # sigma = 14.567 MPa
+
+# Decimalna mjesta: {varijabla:.Nf}
+print(f"sigma = {sigma:.2f} MPa") # sigma = 14.57 MPa
+print(f"M_Ed = {M_Ed:.1f} kNm") # M_Ed = 187.2 kNm
+# Širina polja (poravnanje): {varijabla@:>Nf} ili {@:>Ns}
+print(f"sigma = {sigma:>8.3f} MPa") # desno poravnanje
+print(f"M_Ed = {M_Ed:>8.2f} kNm")
 
 
 # %% [14] Kontrola petlji: break i continue
