@@ -38,7 +38,7 @@
 #       Upeto - Zglobno    (U-Z)       | 0.70
 #       Upeto - Upeto      (U-U)       | 0.50
 #
-#  Vitkoća stupa: lambda = beta * L / i_min
+#  Vitkost stupa: lambda = beta * L / i_min
 #  gdje je i_min = sqrt(I_min / A) --- minimalni polumjer tromosti [m]
 #
 # =============================================================================
@@ -49,10 +49,12 @@
 #  Uvijek uvozite na vrhu datoteke.
 # -----------------------------------------------------------------------
 
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 print("Biblioteke uspješno uvezene.")
-
+print(f"Numpy verzija: {np.__version__}")
+print(f"Matplotlib verzija: {plt.matplotlib.__version__}")
 
 # %%  [FAZA 1]  Parametri čeličnog stupa --- IPE 300
 # -----------------------------------------------------------------------
@@ -67,18 +69,18 @@ E   = 210.0e6    # modul elastičnosti [kN/m²]
 fyk = 235.0      # karakteristična granica popuštanja [MPa]
 
 # Profil: IPE 300 (izvijanje oko slabe osi z-z!)
-                 # površina presjeka [cm²]
-                 # moment tromosti oko z-osi [cm⁴]  <-- slaba os!
-                 # moment tromosti oko y-osi [cm⁴]  <-- jaka os
+A_cm2 = 53.0     # površina presjeka [cm²]
+Iz_cm4 = 604.0   # moment tromosti oko z-osi [cm⁴]  <-- slaba os!
+Iy_cm4 = 8356.0  # moment tromosti oko y-osi [cm⁴]  <-- jaka os
 
 # Pretvorba u SI jedinice [m]
-    # m²
-    # m⁴  <-- koristimo za izvijanje!
-    # m⁴
+A = A_cm2 * 1E-4      # m² (1/10000 ili 10**(-4))
+I_z = Iz_cm4 * 1E-8    # m⁴  <-- koristimo za izvijanje!
+I_y = Iy_cm4 * 1E-8    # m⁴
 
 # Polumjeri tromosti
-    # m  --- relevantan za izvijanje!
-    # m
+i_z = np.sqrt(I_z/A)  # m  --- relevantan za izvijanje!
+i_y = np.sqrt(I_y/A)     # m
 
 print("--- IPE 300 | Čelik S235 ---")
 print(f"  A   = {A*1e4:.2f} cm²")
@@ -98,10 +100,10 @@ beta = 1.0     # Zglobno - Zglobno
 L    = 5.0     # visina stupa [m]
 
 # Eulerova formula
-    # kN
+N_cr = np.pi**2 * E * I_z / (beta * L)**2    # kN
 
-# Vitkoća
-    # bezdimenzijska vitkoća
+# Vitkost
+lam = beta * L / i_z    # bezdimenzijska vitkost
 
 print("--- Provjera za jedan slučaj ---")
 print(f"  Rubni uvjeti: Zglobno-Zglobno (beta = {beta})")
@@ -109,8 +111,11 @@ print(f"  L    = {L:.1f} m")
 print(f"  N_cr = {N_cr:.2f} kN")
 print(f"  lambda = {lam:.1f}  (vitkoća stupa)")
 
+# 1 kN/m2 = 1 kPa
+# 1 MPa = 1000 kPa
+
 # Usporedba s plastičnom nosivošću presjeka
-    # kN  (gamma_M0 = 1.0)
+N_pl = fyk * 1E3 * A # kN  (gamma_M0 = 1.0)
 print(f"  N_pl = {N_pl:.1f} kN  (plastična nosivost presjeka)")
 print(f"  N_cr / N_pl = {N_cr/N_pl:.3f}")
 
@@ -121,25 +126,31 @@ print(f"  N_cr / N_pl = {N_cr/N_pl:.3f}")
 #  Prikazujemo kako N_cr brzo pada s porastom visine (proporcionalno 1/L²).
 # -----------------------------------------------------------------------
 
-    # Zglobno - Zglobno
+beta = 1.0   # Zglobno - Zglobno
 
 # Diskretizacija visina stupa: od 2 do 12 m
-    # m
+L_arr = np.linspace(2, 12, 200)    # m
 
 # Vektorski izračun --- bez petlje!
-    # kN
+N_cr_arr = np.pi**2 * E * I_z / (beta * L_arr)**2    # kN
 
 # Horizontalna linija: plastična nosivost (gornja granica!)
-    # kN
+N_pl = fyk * 1E3 * A # kN
 
 # --- Crtanje ---
-# fig, ax = ...
-# ax.plot(...)
-# ax.axhline(...)
-# ax.set_xlabel(...)  ax.set_ylabel(...)  ax.set_title(...)
-# ax.set_xlim(...)    ax.set_ylim(...)
-# ax.legend()         ax.grid(...)
+fig, ax = plt.subplots(figsize=(5,2.5)) # dimenzije u inčima
+ax.plot(L_arr, N_cr_arr, color="blue", lw=3, label="N_cr (Z-Z, beta=1.0)")
+ax.axhline(N_pl, color="red", ls="-.", lw=2, label=f"N_pl = {N_pl:.0f} kN - plastična nosivost")
+ax.set_xlabel("Visina stupa, L [m]")
+ax.set_ylabel("N_cr [kN]")
+ax.set_title("Eulerova kritična sila - IPE 300, S235 (Z-Z)")
+ax.set_xlim(0,8)
+ax.set_ylim(0,1500)
+ax.legend(loc="lower left")
+ax.grid(True, alpha=0.5)
 # plt.tight_layout()  plt.show()
+
+plt.show()
 
 print("Graf jedne krivulje iscrtan.")
 
@@ -153,17 +164,17 @@ print("Graf jedne krivulje iscrtan.")
 #  Zašto je N_cr za U-U četiri puta veći nego za Z-Z?
 # -----------------------------------------------------------------------
 
-    # m --- fiksna visina za tablicu
+L_fix = 5.0  # m --- fiksna visina za tablicu
 
 # Rubni uvjeti kao NumPy arraji (isti indeks = isti slučaj!)
-    # beta_arr = ...
-    # oznake   = ...
+beta_arr = np.array([1.0, 2.0, 0.7, 0.5])    # beta_arr = ...
+oznake = ["Z-Z", "U-Sl", "U-Z", "U-U"]    # oznake   = ...
 
 # Vektorski izračun za sve rubne uvjete odjednom
-                       # kN
-                       # vitkoost
+N_cr_sve = np.pi**2 * E * I_z / (beta_arr * L_fix)**2 # kN
+lam_sve  = beta_arr * L_fix / i_z   # vitkost
 
-    # kN
+N_pl = fyk * 1E3 * A  # kN
 
 print(f"--- Usporedna tablica: IPE 300, L = {L_fix} m ---")
 print(f"{'Rubni uvjeti':>16} | {'beta':>5} | "
@@ -185,31 +196,36 @@ for k in range(len(beta_arr)):
 #  Primijetite: enumerate() daje i indeks (k) i vrijednost (beta_i).
 # -----------------------------------------------------------------------
 
-    # m  — zajednički niz visina
-    # boje = [...]
+L_arr = np.linspace(1, 15, 300)    # m  — zajednički niz visina
+boje  = ["blue", "orange", "green", "red"]    # boje = [...]
 
-# fig, ax = plt.subplots(...)
+fig, ax = plt.subplots(figsize=(5,2.5))
 
-# for k, (beta_i, ozn_i) in enumerate(zip(beta_arr, oznake)):
-#     N_cr_i = ...
-#
-#     # Granica EC3: vitkoća lambda <= 200  →  L <= 200 * i_z / beta_i
-#     L_lim_i = ...
-#     maska    = ...
-#
-#     # Punom linijom do granice vitkoće, isprekidanom iznad nje
-#     ax.plot(L_arr[maska],  ...)
-#     ax.plot(L_arr[~maska], ..., ls='--', alpha=0.45)
+for k, (beta_i, ozn_i) in enumerate(zip(beta_arr, oznake)):
+    N_cr_i = np.pi**2 * E * I_z / (beta_i * L_arr)**2 # kN
 
-# ax.axhline(N_pl, ...)          # horizontalna linija: N_pl
+    # Granica EC3: vitkost lambda <= 200  →  L <= 200 * i_z / beta_i
+    L_lim_i = 200 * i_z / beta_i
+    # maska    = ...
+
+    # Punom linijom do granice vitkoće, isprekidanom iznad nje
+    ax.plot(L_arr, N_cr_i, color=boje[k], lw=2, label=f"{ozn_i}, (beta={beta_i:.2f}")
+    # ax.plot(L_arr[~maska], ..., ls='--', alpha=0.45)
+
+ax.axhline(N_pl, color="black")          # horizontalna linija: N_pl
 # ax.axvline(L_ref, ...)         # vertikalna linija: lambda=200 (Z-Z)
 # ax.text(...)                   # tekstualne oznake
-# ax.set_xlabel(...)  ax.set_ylabel(...)  ax.set_title(...)
-# ax.set_xlim(...)    ax.set_ylim(...)
-# ax.legend(...)      ax.grid(...)
+ax.set_xlabel("Duljine, L [m]")
+ax.set_ylabel("N_cr [kN]")
+# ax.set_title(...)
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 2000)
+ax.legend(loc="best")
+ax.grid(True, alpha=0.5)
 # plt.tight_layout()
-# plt.savefig('tjedan4_izvijanje.pdf', dpi=200)
-# plt.show()
+plt.savefig('tjedan4_izvijanje.png', dpi=200)
+plt.savefig('tjedan4_izvijanje.pdf', dpi=200)
+plt.show()
 
 print("Glavni graf s višestrukim krivuljama iscrtan i pohranjen.")
 
