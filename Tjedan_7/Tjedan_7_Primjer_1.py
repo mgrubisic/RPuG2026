@@ -77,6 +77,7 @@ w_kub = interp_kub(F_fino)
 cs = interpolate.CubicSpline(F_mjereno, w_mjereno, bc_type='natural')
 w_cs = cs(F_fino)
 
+#%%
 # ---------------------------------------------------------------
 # PROCJENA PROGIBA ZA SPECIFIČNE VRIJEDNOSTI SILE
 # ---------------------------------------------------------------
