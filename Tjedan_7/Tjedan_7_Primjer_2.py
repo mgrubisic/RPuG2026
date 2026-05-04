@@ -30,8 +30,8 @@ from scipy import interpolate, integrate
 # PARAMETRI GREDE I OPTEREĆENJA
 # ---------------------------------------------------------------
 L   = 6.0   # raspon grede [m]
-q0  = 20.0  # intenzitet opterećenja — lijevi kraj [kN/m]
-q1  = 8.0   # intenzitet opterećenja — desni kraj  [kN/m]
+q0  = 50.0  # intenzitet opterećenja — lijevi kraj [kN/m]
+q1  = 5.0   # intenzitet opterećenja — desni kraj  [kN/m]
 
 # ── Reakcije oslonaca iz uvjeta ravnoteže ──────────────────────
 # Suma momenata oko B (desni oslonac):
@@ -80,9 +80,9 @@ x_ref = np.linspace(0, L, 1000)
 # ---------------------------------------------------------------
 # NUMERIČKA ANALIZA — tri gustoće diskretizacije
 # ---------------------------------------------------------------
-N_lista  = [5, 15, 50]                               # broj intervala
-boje     = ['#e74c3c', '#f39c12', '#27ae60']          # crvena, narančasta, zelena
-stilovi  = ['-.', '--', '-']                           # stil linije
+N_lista  = [3, 6, 9]                              # broj intervala
+boje     = ['#e74c3c', '#f39c12', '#27ae60']      # crvena, narančasta, zelena
+stilovi  = ['-.', '--', '-']                      # stil linije
 nazivi   = ['Gruba mreža (N = 5)',
             'Srednja mreža (N = 15)',
             'Fina mreža (N = 50)']
@@ -96,7 +96,7 @@ x_Mmax_num  = []   # numerički pronađeni položaj Mmax
 # ---------------------------------------------------------------
 # GRAFIČKI PRIKAZ — 3 retka × 2 stupca
 # ---------------------------------------------------------------
-fig, axes = plt.subplots(3, 2, figsize=(14, 15))
+fig, axes = plt.subplots(3, 2, figsize=(10, 10))
 fig.suptitle(
     'Primjer 2 — Utjecaj gustoće diskretizacije na numeričku integraciju i derivaciju\n'
     f'AB greda s trapeznim opterećenjem  (q₀={q0} kN/m, q₁={q1} kN/m, L={L} m)',
@@ -192,6 +192,7 @@ for i, (N, boja, stil, naziv) in enumerate(zip(N_lista, boje, stilovi, nazivi)):
     ax.set_xlabel('x [m]')
     ax.set_ylabel('M [kNm]')
     ax.legend(fontsize=8, loc='upper right')
+    ax.invert_yaxis()
     ax.grid(True, alpha=0.3)
     
 plt.tight_layout()

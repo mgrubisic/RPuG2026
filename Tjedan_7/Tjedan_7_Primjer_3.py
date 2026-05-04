@@ -54,7 +54,7 @@ E_mjere = E_ref + np.random.normal(0, 3.0, len(T_mjere))
 
 # Linearna regresija metodom najmanjih kvadrata (polinom stupnja 1)
 # np.polyfit(x, y, deg) → vraća koeficijente [a, b] za a·T + b
-koef_lin = np.polyfit(T_mjere, E_mjere, 1)
+koef_lin  = np.polyfit(T_mjere, E_mjere, 1)
 poly_lin  = np.poly1d(koef_lin)          # objekt za evaluaciju polinoma
 
 # Fina mreža za crtanje glatke linije regresije

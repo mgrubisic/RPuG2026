@@ -51,7 +51,7 @@ n_ploce    = 70
 #   Temelji: dobro vibriran beton, relativno mali CoV
 #   Stupovi:  optimalni uvjeti, visoka čvrstoća
 #   Ploče:    veće rasipanje (tanka oplata, poteškoće ugradnje)
-fc_temelji = np.random.normal(loc=37.5, scale=4.0, size=n_temelji)  # [MPa]
+fc_temelji  = np.random.normal(loc=37.5, scale=4.0, size=n_temelji)  # [MPa]
 fc_stupovi  = np.random.normal(loc=41.0, scale=3.5, size=n_stupovi)  # [MPa]
 fc_ploce    = np.random.normal(loc=34.5, scale=6.0, size=n_ploce)    # [MPa]
 
@@ -161,7 +161,7 @@ print("=" * 65)
 # ---------------------------------------------------------------
 # GRAFIČKI PRIKAZ — 2 × 2 raspored
 # ---------------------------------------------------------------
-fig, axes = plt.subplots(2, 2, figsize=(14, 11))
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 fig.suptitle(
     f'Primjer 4 — Kontrola kvalitete betona C30/37\n'
     f'fck = {fck} MPa | Gornja kontrolna granica = {granica_gornja} MPa | '

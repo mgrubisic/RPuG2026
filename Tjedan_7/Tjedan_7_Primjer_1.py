@@ -124,8 +124,8 @@ stil_tocke = dict(
 
 # ── GRAF 1: Linearna interpolacija ──────────────────────────────
 ax = axes[0, 0]
-ax.plot(F_fino, w_lin, color='#2980b9', linewidth=2, label='Linearna interpolacija')
-ax.plot(F_mjereno, w_mjereno, **stil_tocke)
+ax.plot(w_lin, F_fino, color='#2980b9', linewidth=2, label='Linearna interpolacija')
+ax.plot(w_mjereno, F_mjereno, **stil_tocke)
 ax.set_title('Linearna interpolacija', fontweight='bold')
 ax.set_xlabel('Sila F [kN]')
 ax.set_ylabel('Progib w [mm]')
@@ -134,7 +134,7 @@ ax.grid(True, alpha=0.3)
 # Oznaka nedostatka: lom u čvornoj točki
 ax.annotate(
     '"Lom" — diskontinuitet\nkrivulje u čvornoj točki',
-    xy=(45, 8.5), xytext=(55, 4.5),
+    xy=(8.5, 45), xytext=(8, 25),
     arrowprops=dict(arrowstyle='->', color='#e74c3c', lw=1.5),
     color='#e74c3c', fontsize=8.5,
     bbox=dict(boxstyle='round,pad=0.3', facecolor='#fdecea', alpha=0.8)
@@ -142,8 +142,8 @@ ax.annotate(
 
 # ── GRAF 2: Kvadratna interpolacija ─────────────────────────────
 ax = axes[0, 1]
-ax.plot(F_fino, w_kv, color='#27ae60', linewidth=2, label='Kvadratna interpolacija')
-ax.plot(F_mjereno, w_mjereno, **stil_tocke)
+ax.plot(w_kv, F_fino, color='#27ae60', linewidth=2, label='Kvadratna interpolacija')
+ax.plot(w_mjereno, F_mjereno, **stil_tocke)
 ax.set_title('Kvadratna (kvadratna spline) interpolacija', fontweight='bold')
 ax.set_xlabel('Sila F [kN]')
 ax.set_ylabel('Progib w [mm]')
@@ -152,8 +152,8 @@ ax.grid(True, alpha=0.3)
 
 # ── GRAF 3: Kubna interpolacija (interp1d) ───────────────────────
 ax = axes[1, 0]
-ax.plot(F_fino, w_kub, color='#e74c3c', linewidth=2, label='Kubna interpolacija (interp1d)')
-ax.plot(F_mjereno, w_mjereno, **stil_tocke)
+ax.plot(w_kub, F_fino, color='#e74c3c', linewidth=2, label='Kubna interpolacija (interp1d)')
+ax.plot(w_mjereno, F_mjereno, **stil_tocke)
 ax.set_title('Kubna interpolacija (scipy.interp1d)', fontweight='bold')
 ax.set_xlabel('Sila F [kN]')
 ax.set_ylabel('Progib w [mm]')
@@ -162,22 +162,22 @@ ax.grid(True, alpha=0.3)
 
 # ── GRAF 4: Usporedba svih metoda + tangentna krutost ───────────
 ax = axes[1, 1]
-ax.plot(F_fino, w_lin, color='#2980b9',  linestyle='--',  linewidth=1.5,
+ax.plot(w_lin, F_fino, color='#2980b9',  linestyle='--',  linewidth=1.5,
         label='Linearna', alpha=0.85)
-ax.plot(F_fino, w_kv,  color='#27ae60',  linestyle='-.',  linewidth=1.5,
+ax.plot(w_kv, F_fino,  color='#27ae60',  linestyle='-.',  linewidth=1.5,
         label='Kvadratna', alpha=0.85)
-ax.plot(F_fino, w_kub, color='#e74c3c',  linestyle='-',   linewidth=2.0,
+ax.plot(w_kub, F_fino, color='#e74c3c',  linestyle='-',   linewidth=2.0,
         label='Kubna (interp1d)')
-ax.plot(F_fino, w_cs,  color='#8e44ad',  linestyle=':',   linewidth=2.5,
+ax.plot(w_cs, F_fino, color='#8e44ad',  linestyle=':',   linewidth=2.5,
         label='Prirodni kubni spline')
-ax.plot(F_mjereno, w_mjereno, **stil_tocke)
+ax.plot(w_mjereno, F_mjereno, **stil_tocke)
 # Označi upitane vrijednosti
 for F_upit in F_upit_lista:
     w_upit = cs(F_upit)
-    ax.plot(F_upit, w_upit, 'v', color='#f39c12', markersize=10, zorder=6)
+    ax.plot(w_upit, F_upit, 'v', color='#f39c12', markersize=10, zorder=6)
     ax.annotate(
         f'F={F_upit:.0f} kN\nw={w_upit:.1f} mm',
-        xy=(F_upit, w_upit), xytext=(F_upit + 4, w_upit - 4),
+        xy=(w_upit, F_upit), xytext=(w_upit - 4, F_upit + 4),
         fontsize=7.5, color='#7f6000',
         bbox=dict(boxstyle='round,pad=0.2', facecolor='#fef9e7', alpha=0.8)
     )
