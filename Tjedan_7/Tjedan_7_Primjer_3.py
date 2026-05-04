@@ -145,7 +145,7 @@ fig.suptitle(
 )
 
 # Zajednički stil za mjerene točke (ax.scatter parametri)
-stil_mjere = dict(color='black', marker='o', s=55,
+stil_mjere = dict(color='black', marker='o', s=65,
                   edgecolors='white', linewidths=0.5, zorder=5)
 
 # ── 1A: LINEARNI trend — model + mjerenja ─────────────────────

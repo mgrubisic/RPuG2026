@@ -18,7 +18,7 @@
 #
 # Pedagoški cilj:
 #   Usporediti točnost numeričke integracije i derivacije
-#   za GRUBA (N=5), SREDNJA (N=15) i FINA (N=50) diskretizacija
+#   za GRUBA (N=3), SREDNJA (N=6) i FINA (N=9) diskretizacija
 #   poprečnog presjeka duž osi grede.
 # ===============================================================
 
@@ -30,8 +30,8 @@ from scipy import interpolate, integrate
 # PARAMETRI GREDE I OPTEREĆENJA
 # ---------------------------------------------------------------
 L   = 6.0   # raspon grede [m]
-q0  = 50.0  # intenzitet opterećenja — lijevi kraj [kN/m]
-q1  = 5.0   # intenzitet opterećenja — desni kraj  [kN/m]
+q0  = 20.0  # intenzitet opterećenja — lijevi kraj [kN/m]
+q1  = 0.0   # intenzitet opterećenja — desni kraj  [kN/m]
 
 # ── Reakcije oslonaca iz uvjeta ravnoteže ──────────────────────
 # Suma momenata oko B (desni oslonac):
@@ -83,9 +83,9 @@ x_ref = np.linspace(0, L, 1000)
 N_lista  = [3, 6, 9]                              # broj intervala
 boje     = ['#e74c3c', '#f39c12', '#27ae60']      # crvena, narančasta, zelena
 stilovi  = ['-.', '--', '-']                      # stil linije
-nazivi   = ['Gruba mreža (N = 5)',
-            'Srednja mreža (N = 15)',
-            'Fina mreža (N = 50)']
+nazivi   = [f'Gruba mreža (N = {N_lista[0]})',
+            f'Srednja mreža (N = {N_lista[1]})',
+            f'Fina mreža (N = {N_lista[2]})']
 
 # Pohrana grešaka za tablicu konvergencije
 pogreske_T  = []
@@ -156,7 +156,7 @@ for i, (N, boja, stil, naziv) in enumerate(zip(N_lista, boje, stilovi, nazivi)):
     ax.plot(x_ref, T_egzakt(x_ref), 'k-', linewidth=2.5, label='Egzaktno', zorder=5)
     ax.plot(x_ref, spl_T(x_ref), linestyle=stil, color=boja, linewidth=2.2,
             label=f'{naziv}\nRMS = {T_rms:.3f} kN', zorder=4)
-    ax.plot(x_m, T_num, 'o', color=boja, markersize=5, zorder=6, label='Čvorovi mreže')
+    ax.plot(x_m, T_num, 'o', color=boja, markersize=7, zorder=6, label='Čvorovi mreže')
     ax.axhline(0, color='gray', linewidth=0.8, linestyle=':')
     # Obojenje zone ispod i iznad nule
     ax.fill_between(x_ref, 0, T_egzakt(x_ref),
@@ -174,7 +174,7 @@ for i, (N, boja, stil, naziv) in enumerate(zip(N_lista, boje, stilovi, nazivi)):
     ax.plot(x_ref, M_egzakt(x_ref), 'k-', linewidth=2.5, label='Egzaktno', zorder=5)
     ax.plot(x_ref, spl_M(x_ref), linestyle=stil, color=boja, linewidth=2.2,
             label=f'{naziv}\nRMS = {M_rms:.3f} kNm', zorder=4)
-    ax.plot(x_m, M_num, 'o', color=boja, markersize=5, zorder=6, label='Čvorovi mreže')
+    ax.plot(x_m, M_num, 'o', color=boja, markersize=7, zorder=6, label='Čvorovi mreže')
     ax.axhline(0, color='gray', linewidth=0.8, linestyle=':')
     ax.fill_between(x_ref, 0, M_egzakt(x_ref), alpha=0.10, color='#27ae60')
     # Označi numerički pronađeni maksimum
