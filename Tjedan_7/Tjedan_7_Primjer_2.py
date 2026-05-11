@@ -200,71 +200,6 @@ plt.savefig('primjer_02_integracija_derivacija.pdf',
             dpi=150, bbox_inches='tight')
 plt.show()
 
-# # ---------------------------------------------------------------
-# # GRAFIKON KONVERGENCIJE — pad greške s gustoćom mreže
-# # ---------------------------------------------------------------
-# fig2, axes2 = plt.subplots(1, 2, figsize=(13, 5))
-# fig2.suptitle(
-#     'Primjer 2 — Konvergencija numeričke integracije i derivacije\n'
-#     's povećanjem broja intervala N',
-#     fontsize=13, fontweight='bold'
-# )
-
-# # ── Lijevo: Usporedi RMS greške svih veličina po N ────────────
-# ax = axes2[0]
-# x_bar = np.arange(len(N_lista))
-# sirina = 0.27
-# ax.bar(x_bar - sirina, pogreske_T,  sirina, label='RMS greška T(x) [kN]',
-#        color='#2980b9', edgecolor='black', linewidth=0.6)
-# ax.bar(x_bar,          pogreske_M,  sirina, label='RMS greška M(x) [kNm]',
-#        color='#27ae60', edgecolor='black', linewidth=0.6)
-# ax.bar(x_bar + sirina, pogreske_dM, sirina, label='RMS greška dM/dx [kN]',
-#        color='#e74c3c', edgecolor='black', linewidth=0.6)
-# # Označi vrijednosti iznad stupaca
-# for j, N in enumerate(N_lista):
-#     for k, (err, col) in enumerate(zip(
-#             [pogreske_T[j], pogreske_M[j], pogreske_dM[j]],
-#             ['#2980b9', '#27ae60', '#e74c3c'])):
-#         ax.text(x_bar[j] + (k - 1) * sirina, err + 0.002,
-#                 f'{err:.4f}', ha='center', fontsize=7.5, color=col)
-# ax.set_xticks(x_bar)
-# ax.set_xticklabels([f'N = {N}' for N in N_lista], fontsize=11)
-# ax.set_title('Usporedba RMS grešaka po gustoći mreže', fontweight='bold')
-# ax.set_xlabel('Broj intervala N')
-# ax.set_ylabel('RMS greška')
-# ax.legend(fontsize=9)
-# ax.grid(True, alpha=0.3, axis='y')
-
-# # ── Desno: Položaj Mmax — usporedba numeričke i egzaktne procjene ─
-# ax = axes2[1]
-# x_pos = np.arange(len(N_lista) + 1)
-# M_max_vrijednosti  = [M_egzakt(xn) for xn in x_Mmax_num] + [M_max]
-# xpos_vrijednosti   = list(x_Mmax_num) + [x_Mmax]
-# boje_bar = boje + ['black']
-# nazivi_bar = [f'N={N}' for N in N_lista] + ['Egzaktno']
-# ax.bar(x_pos, M_max_vrijednosti,
-#        color=boje_bar + ['#2c3e50'],
-#        edgecolor='black', linewidth=0.7, alpha=0.8)
-# ax.axhline(M_max, color='black', linestyle='--', linewidth=1.5,
-#            label=f'Egzaktno: Mmax = {M_max:.3f} kNm')
-# for j, (mp, xp) in enumerate(zip(M_max_vrijednosti, xpos_vrijednosti)):
-#     ax.text(x_pos[j], mp + 0.05,
-#             f'M={mp:.2f}\nx={xp:.3f} m',
-#             ha='center', fontsize=8, va='bottom')
-# ax.set_xticks(x_pos)
-# ax.set_xticklabels(nazivi_bar, fontsize=10)
-# ax.set_title('Procjena položaja i veličine Mmax\n'
-#              'numeričkim vs. egzaktnim rješenjem', fontweight='bold')
-# ax.set_ylabel('M_max [kNm]')
-# ax.legend(fontsize=9)
-# ax.grid(True, alpha=0.3, axis='y')
-# ax.set_ylim(0, M_max * 1.15)
-
-# plt.tight_layout()
-# plt.savefig('primjer_02_konvergencija.pdf',
-#             dpi=150, bbox_inches='tight')
-# plt.show()
-
 # ---------------------------------------------------------------
 # TABLICA KONVERGENCIJE — ispis na konzolu
 # ---------------------------------------------------------------
@@ -277,8 +212,4 @@ print("-" * 70)
 for N, eT, eM, edM, xM in zip(N_lista, pogreske_T, pogreske_M, pogreske_dM, x_Mmax_num):
     print(f"N = {N:<14} {eT:>14.6f} {eM:>14.6f} {edM:>16.6f} {xM:>13.6f}")
 print(f"{'Egzaktno':<18} {'—':>14} {'—':>14} {'—':>16} {x_Mmax:>13.6f}")
-print(f"\nKljučni zaključak:")
-print(f"  → Derivacija (dM/dx) numerički je MANJE TOČNA od integracije.")
-print(f"  → Greška integracije opada ~O(h²), derivacije ~O(h²) ali uz")
-print(f"    veće konstante → potrebna finja mreža za isti nivo točnosti.")
 print("=" * 70)

@@ -33,6 +33,8 @@ from scipy import interpolate
 # 8 diskretnih mjernih točaka (tipičan broj u praksi)
 
 F_mjereno = np.array([0.0,  10.0, 25.0, 45.0, 60.0, 80.0, 100.0, 120.0])  # [kN]
+
+# F_mjereno = np.array([0.0,  13.0, 22.0, 49.0, 58.0, 80.0, 100.0, 120.0])  # [kN]
 w_mjereno = np.array([0.0,   1.2,  3.8,  8.5, 13.2, 21.0,  32.5,  48.0])  # [mm]
 
 # Napomena:
@@ -40,7 +42,7 @@ w_mjereno = np.array([0.0,   1.2,  3.8,  8.5, 13.2, 21.0,  32.5,  48.0])  # [mm]
 #   - Nagli porast progiba između 100 i 120 kN → tečenje armature
 
 # Fina jednolična mreža za prikaz interpoliranih krivulja
-F_fino = np.linspace(F_mjereno[0], F_mjereno[-1], 500)
+F_fino = np.linspace(F_mjereno[0], F_mjereno[-1], 50)
 
 # ---------------------------------------------------------------
 # 1. LINEARNA INTERPOLACIJA
@@ -124,7 +126,7 @@ stil_tocke = dict(
 
 # ── GRAF 1: Linearna interpolacija ──────────────────────────────
 ax = axes[0, 0]
-ax.plot(w_lin, F_fino, color='#2980b9', linewidth=2, label='Linearna interpolacija')
+ax.plot(w_lin, F_fino, 'b.-', linewidth=2, ms=10, label='Linearna interpolacija')
 ax.plot(w_mjereno, F_mjereno, **stil_tocke)
 ax.set_title('Linearna interpolacija', fontweight='bold')
 ax.set_xlabel('Sila F [kN]')
