@@ -37,7 +37,7 @@ q1  = 0.0   # intenzitet opterećenja — desni kraj  [kN/m]
 # Suma momenata oko B (desni oslonac):
 # RA·L = q0·L²/2 + (q1–q0)·L²/6
 RA = (q0 * L**2 / 2 + (q1 - q0) * L**2 / 6) / L  # [kN]
-RB = (q0 + q1) * L / 2 - RA                         # [kN]
+RB = (q0 + q1) * L / 2 - RA                      # [kN]
 
 print("=" * 60)
 print("PRIMJER 2: Numerička integracija i derivacija")
