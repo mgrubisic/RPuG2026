@@ -78,6 +78,8 @@ L_mjere = np.array([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 12.0])  # [m]
 w_ref   = 0.15 * L_mjere**2           # [mm] (kvadratni trend koji aproksimira L⁴)
 w_mjere = w_ref + np.random.normal(0, 0.5, len(L_mjere))  # dodajemo mjerni šum
 
+# mojaVarijabla, moja_varijabla, moja-kriva-varijabla
+
 # Kvadratna regresija (polinom stupnja 2)
 koef_par = np.polyfit(L_mjere, w_mjere, 2)
 poly_par  = np.poly1d(koef_par)

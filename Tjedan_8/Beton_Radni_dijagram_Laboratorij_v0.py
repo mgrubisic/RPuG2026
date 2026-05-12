@@ -620,7 +620,7 @@ for eps_t in eps_lista:
 
 
 # ── KORAK 6: Statistika za zadanu deformaciju ─────────────────
-EPS_QUERY = 0.004   # <-- promijenite po potrebi
+EPS_QUERY = 0.002   # <-- promijenite po potrebi
 
 print("\n[6]  Osnovna statistika za  eps =", EPS_QUERY, "...")
 statistics_at_strain(EPS_QUERY, stats)
