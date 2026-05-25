@@ -1,0 +1,95 @@
+"Proračun armiranobetonskog T-presjeka na savijanje<hr/><small>Prema <strong>Eurokodu</strong>: EN 1992-1-1</small>
+'<div style="max-width:180mm;">
+'<img style="width:400pt;" src="https://calcpad.eu/media/structures/rc/design/tbeam-bending.png" alt="tbeam-bending.png">
+'Projektni moment savijanja -'M_Ed = ? {800}'kN·m
+'<h4>Dimenzije poprečnog presjeka</h4>
+'Rebro -'b_w = ? {250}'mm,'h_w = ? {600}'mm
+'Pojasnica -'b_f = ? {1200}'mm,'h_f = ? {120}'mm
+'Udaljenost od ruba betona do težišta armature -'d_1 = ? {50}'mm
+#post
+'Statička visina presjeka -'d = h_w - d_1'mm
+'Površina pojasnice -'A_f = (b_f - b_w)*h_f'mm<sup>2</sup>
+'Statički moment površine pojasnice -'S_f = A_f*(d - h_f/2)'mm<sup>3</sup>
+#show
+'<h4>Svojstva materijala</h4>
+'<p style="float:right">[EN 1992-1-1, <a target="_blank" href="https://calcpad.eu/reference/concrete-table.html">Tablica 3.1</a>]</p>
+'<p><b>Beton</b></p>
+'Karakteristična tlačna čvrstoća betona na valjcima -'f_ck = ? {20}'MPa
+'Parcijalni faktor sigurnosti za beton -'γ_c = 1.5','α_cc = ? {0.85}
+#post
+'Projektna tlačna čvrstoća betona na valjcima -'f_cd = α_cc*f_ck/γ_c'MPa
+'Faktor efektivne visine tlačne zone -'λ = 0.8
+'Faktor efektivne tlačne čvrstoće -'η = 1.0
+'Granična tlačna deformacija -'ε_cu3 = 0.0035
+'Srednja vrijednost osne vlačne čvrstoće -'f_ctm = 0.30*f_ck^(2/3)'MPa
+#show
+'<p><b>Čelik</b></p>
+'Karakteristična granica popuštanja -'f_yk = ? {500}'MPa
+#post
+'Parcijalni faktor sigurnosti za čelik -'γ_s = 1.15
+'Projektna granica popuštanja -'f_yd = f_yk/γ_s'MPa
+'Modul elastičnosti -'E_s = 200000'MPa
+'<h4>Proračun na savijanje</h4>
+'Provjera položaja neutralne osi
+'Moment savijanja za neutralnu os na donjem rubu pojasa
+M_f = b_f*h_f*η*f_cd*(d - h_f/2)*10^-6'kN·m
+#if M_Ed > M_f
+'Neutralna os nalazi se ispod pojasa - proračun T-presjeka
+'Relativni projektni moment savijanja -'m_Ed = M_Ed*10^6/(b_w*d^2*η*f_cd)
+'Visina tlačne zone -'x = d/λ*(1 - sqr(1 - 2*(m_Ed - S_f/(b_w*d^2))))'mm
+'Relativna visina tlačne zone -'ξ = x/d'
+'Projektna deformacija popuštanja armature -'ε_yd = f_yd/E_s
+'Relativna visina tlačne zone koja odgovara projektnoj deformaciji popuštanja
+ξ_yd = ε_cu3/(ε_cu3 + ε_yd)
+#show
+'Granična relativna visina tlačne zone -'ξ_lim = ? {0.62}
+'(unesite <i>ξ</i><sub>yd</sub> za elastičnu ili 0.45 za plastičnu analizu)
+#post
+#if ξ ≤ ξ_lim
+ξ'≤'ξ_lim'- tlačna armatura NIJE potrebna.
+'Krak unutarnjih sila -'z = d - 0.5*λ*x'mm
+'Potrebna površina vlačne armature -'A_s1 = M_Ed*10^6/(z*f_yd)'mm<sup>2</sup>
+'Koeficijent armiranja -'ρ_1 = A_s1/(b_w*d)
+'<!--'ρ_2 = 0'-->
+#else
+ξ'>'ξ_lim'- tlačna armatura je potrebna.
+'Pretpostavlja se relativna visina'ξ = ξ_lim'i proračunava se tlačna armatura
+'Visina tlačne zone -'x = ξ*d'mm
+'Udaljenost od težišta tlačne armature do površine betona
+d_2 = h_w - d'mm
+'Udaljenost između vlačne i tlačne armature -'z_s = d - d_2'mm
+'Potrebna površina vlačne armature
+A_s1 = (M_Ed*10^6 + (b_w*λ*x*(λ*x/2 - d_2) + A_f*(h_f/2 - d_2))*η*f_cd)/(f_yd*z_s)'mm<sup>2</sup>
+'Deformacija tlačne armature
+ε_s2 = (x - d_2)/x*ε_cu3
+'Naprezanje tlačne armature
+σ_s2 = min(ε_s2*E_s; f_yd)'MPa
+'Potrebna površina tlačne armature
+A_s2 = (A_s1*f_yd - (b_w*λ*x + A_f)*η*f_cd)/σ_s2'mm<sup>2</sup>
+'Stupnjevi armiranja
+'- vlačna armatura -'ρ_1 = A_s1/(b_w*d)
+'- tlačna armatura -'ρ_2 = A_s2/(b_w*d)
+#end if
+#else
+'Neutralna os nalazi se unutar pojasa - proračun pravokutnog presjeka širine'b_f'mm
+'Relativni projektni moment savijanja -'m_Ed = M_Ed*10^6/(b_f*d^2*η*f_cd)
+'Visina tlačne zone -'x = d/λ*(1 - sqr(1 - 2*m_Ed))'mm
+'Krak unutarnjih sila -'z = d - 0.5*λ*x'mm
+'Potrebna površina vlačne armature -'A_s1 = M_Ed*10^6/(z*f_yd)'mm<sup>2</sup>
+'Koeficijent armiranja
+ρ_1 = A_s1/(b_w*d)
+'<!--'ρ_2 = 0'-->
+#end if
+'<p class="ref">[EN 1992-1-1, § 9.2.1.1]
+'Minimalni koeficijent vlačne armature
+ρ_min = max(0.26*f_ctm/f_yk; 0.0013)
+'Minimalna armatura -'A_s_min = ρ_min*b_w*d'mm<sup>2</sup>
+#if A_s1 < A_s_min
+'<p class="err">Mjerodavna je minimalna armatura:'A_s1'mm<sup>2</sup> &lt;'A_s_min'mm<sup>2</sup></p>'
+#end if
+'Maksimalni koeficijent armiranja -'ρ_max = 0.04
+#if '<!--'ρ_1 > ρ_max'-->'
+'<p class="err">Koeficijent armiranja veći je od maksimalnog:'ρ_1'>'ρ_max'mm<sup>2</sup></p>'
+#end if
+#show
+'</div>
