@@ -1,0 +1,114 @@
+"Nosivost armiranobetonskog T-presjeka na savijanje<hr/><small>Prema <strong>Eurokodu</strong>: EN 1992-1-1</small>
+'<div style="max-width:180mm">
+'<img style="width:400pt;" src="https://calcpad.eu/media/structures/rc/design/tbeam-bending.png" alt="tbeam-bending.png">
+'Projektni moment savijanja -'M_Ed = ? {800}'kN·m
+'<h4>Dimenzije poprečnog presjeka</h4>
+'Rebro -'b_w = ? {300}'mm,'h_w = ? {650}'mm
+'Pojasnica -'b_f = ? {1200}'mm,'h_f = ? {120}'mm
+#post
+'Površina pojasnice -'A_f = (b_f - b_w)*h_f'mm²
+'Površina presjeka -'A_c = b_w*h_w + A_f'mm²
+#show
+'<p><b>Zaštitni sloj betona do težišta armature</b></p>
+'Dolje -'d_1 = ? {50}'mm,&nbsp;&nbsp;&nbsp;&nbsp;Gore -'d_2 = ? {50}'mm
+#post
+'Statička visina presjeka -'d = h_w - d_1'mm
+#show
+'<p><b>Armatura</b></p>
+'Dolje -'A_s1 = ? {3700}'mm²,&nbsp;&nbsp;&nbsp;&nbsp;Gore -'A_s2 = ? {0}'mm²
+#post
+'Koeficijenti armiranja
+'- donja armatura -'ρ_1 = (A_s1)/(b_w*d)
+'- gornja armatura -'ρ_2 = (A_s2)/(b_w*d)
+#show
+'<h4>Svojstva materijala</h4>
+'<p style="float:right">[EN 1992-1-1, <a target="_blank" href="https://calcpad.eu/reference/concrete-table.html">Tablica 3.1</a>]</p>
+'<p><b>Beton</b></p>
+'Karakteristična tlačna čvrstoća betona na valjcima -'f_ck = ? {20}'MPa
+'Parcijalni faktor sigurnosti za beton -'γ_c = 1.5','α_cc = ? {0.85}
+#post
+'Projektna tlačna čvrstoća betona na valjcima -'f_cd = α_cc*f_ck/γ_c'MPa
+'Granična tlačna deformacija -'ε_cu2 = 0.0035
+'Deformacija na kraju paraboličnog dijela dijagrama -'ε_c2 = 0.002
+'Srednja vrijednost aksijalne vlačne čvrstoće -'f_ctm = 0.30*f_ck^(2/3)'MPa
+#show
+'<p><b>Čelik</b></p>
+'Karakteristična granica popuštanja -'f_yk = ? {500}'MPa
+#post
+'Parcijalni faktor sigurnosti za čelik -'γ_s = 1.15
+'Projektna granica popuštanja -'f_yd = f_yk/γ_s'MPa
+'Modul elastičnosti -'E_s = 200'GPa
+'<p><b>Dijagrami naprezanje--deformacija</b>, MPa:</p>
+'<!--'PlotWidth = 250','PlotHeight = 125'-->
+'<table><tr><td>
+#hide
+n = 2
+σ_c(ε) = f_cd*((1 - (1 - ε/ε_c2)^n)*(ε < ε_c2) + (ε ≥ ε_c2))
+#post
+$Plot{σ_c(ε/1000) @ ε = 0 : ε_cu2*1000}
+'</td><td>
+#hide
+σ_s(ε) = max(-f_yd; min(ε*E_s*1000; f_yd))
+#post
+$Plot{σ_s(ε/1000) @ ε = -10 : 10}
+'</td></tr></table>
+'<h4>Projektne provjere</h4>
+'<p class="ref">[EN 1992-1-1, § 9.2.1.1]
+'Minimalni koeficijent vlačne armature
+ρ_min = max(0.26*f_ctm/f_yk; 0.0013)
+#if ρ_1 < ρ_min
+'<p class="err">Koeficijent vlačne armature manji je od minimalnog:'ρ_1'&lt;'ρ_min'</p>'
+#end if
+'Maksimalni koeficijent vlačne armature -'ρ_max = 0.04
+#if ρ_1 > ρ_max
+'<p class="err">Koeficijent vlačne armature veći je od maksimalnog:'ρ_1'>'ρ_max'</p>'
+#end if
+'Unutarnje sile u presjeku kao funkcija visine tlačne zone <i>x</i>.
+'Deformacija armature:
+'- u donjoj armaturi -'ε_s1(x) = ε_cu2*(d - x)/x
+'- u gornjoj armaturi -'ε_s2(x) = ε_cu2*(d_2 - x)/x
+'- na donjem rubu pojasnice -'ε_cf(x) = ε_cu2*(x - h_f)/x
+'Koeficijenti za integraciju dijagrama naprezanja betona
+k = f_cd*ε_cu2
+k_1(ε_cu) = $Area{σ_c(ε)/k @ ε = 0 : ε_cu}
+k_2(ε_cu) = $Area{σ_c(ε)*ε/(ε_cu2*k) @ ε = 0 : ε_cu}
+k_1 = k_1(ε_cu2)
+k_2 = k_2(ε_cu2)
+'Unutarnje sile u presjeku:
+'- u betonu -'N_c(x) = -(k_1*x*b_f*(x < h_f) + (k_1*x*b_f - k_1(ε_cf(x))*(x - h_f)*(b_f - b_w))*(x ≥ h_f))*f_cd*10^-3
+'- u donjoj armaturi -'N_s1(x) = σ_s(ε_s1(x))*A_s1*10^-3
+'- u gornjoj armaturi -'N_s2(x) = σ_s(ε_s2(x))*A_s2*10^-3
+'Nosivost presjeka na uzdužnu silu
+N_Rd(x) = N_c(x) + N_s1(x) + N_s2(x)
+$Plot{N_Rd(x) @ x = 0.1 : h_w}
+'Visina tlačne zone određuje se iz ravnoteže uzdužnih sila
+x = $Root{N_Rd(x) @ x = 0.1 : h_w}'mm
+'Visina tlačne zone pri dostizanju granice popuštanja armature
+x_lim = d*ε_cu2/(ε_cu2 + f_yd/E_s*10^-3)'cm
+#if x ≤ x_lim
+'Provjera:'x'≤'x_lim'- tlačna armatura nije potrebna.
+#else
+'Provjera:'x'>'x_lim'- tlačna armatura je potrebna.
+#end if
+'Udaljenost do rezultante ekvivalentnog tlačnog naprezanja betona
+'- od neutralne osi
+#if x < h_f
+z_0 = k_2/k_1*x'cm
+#else
+z_0 = (k_2*x^2*b_f - k_2(ε_cf(x))*(x - h_f)^2*(b_f - b_w))/(k_1*x*b_f - k_1(ε_cf(x))*(x - h_f)*(b_f - b_w))'cm
+#end if
+'- od donjeg ruba presjeka
+z_c = h_w - x + z_0'mm
+'Nosivost na moment savijanja
+M_Rd = (A_s1*σ_s(ε_s1(x))*(z_c - d_1) + A_s2*σ_s(ε_s2(x))*(z_c - h_w + d_2))*10^-6'kN·m
+#if M_Ed > M_Rd
+'Projektni moment savijanja veći je od nosivosti na savijanje
+M_Ed'>'M_Rd'kN·m
+'<p class="err">Projektne provjere NISU zadovoljene.</p>
+#else
+'Projektni moment savijanja manji je od nosivosti na savijanje:
+M_Ed'≤'M_Rd'kN·m
+'Projektne provjere su zadovoljene.
+#end if
+#show
+'</div>
